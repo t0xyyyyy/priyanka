@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Anniversary ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    text-align: center;
+    overflow-x: hidden;
+}
+
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    color: red;
+    font-size: 20px;
+    animation: float 5s linear infinite;
+}
+
+@keyframes float {
+    0% {transform: translateY(0);}
+    100% {transform: translateY(-100vh);}
+}
+
+/* Header */
+header {
+    padding: 60px 20px;
+    color: black;
+}
+
+/* Gallery */
+.gallery img {
+    width: 250px;
+    height: 180px;
+    margin: 10px;
+    border-radius: 15px;
+}
+
+/* Timer */
+#timer {
+    font-size: 1.5em;
+    margin: 20px;
+}
+
+#musicControl {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+
+    box-shadow: 0 0 15px rgba(255, 75, 125, 0.6);
+    transition: 0.3s;
+
+    animation: glow 2s infinite alternate;
+}
+
+/* Hover effect */
+#musicControl:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 75, 125, 1);
+}
+
+/* Click animation */
+#musicControl:active {
+    transform: scale(0.9);
+}
+
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px #ff4b7d;
+    }
+    to {
+        box-shadow: 0 0 25px #ff99ac;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="musicControl" onclick="toggleMusic()">
+    <span id="icon">⏸</span>
+</div>
+
+<!-- Music -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<header>
+    <h1 id="typing"></h1>
+    <p>Our journey of love 😘</p>
+</header>
+
+<div id="timer"></div>
+
+<h2>📸 Our Memories</h2>
+<div class="gallery">
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo4.jpeg">
+</div>
+
+<h2>💌 Message</h2>
+<p>Happy anniversary meraa pyaaaraa baachaa mujhe aaj bhi woh din yaad hai jis din se hum relationship mai aaye aur woh din mere liye aaj bhi khaas hai. Us din se leke aaj tak mai khush hu bahot tumhare saath mera kabhi man nhi kiya tumse dur jaane ka. Akhir meraa raaja betaa hai ji itna accha kya kare aur itnaaa cuteee bhi uuuuuummmmmmaaahhhhhhhhhhhhh 😚. Mai chahunga ki hum hamesha aise saath rahe aur hamari khushi khushi ek saath waqt bitaye. Amiii tumake oneeekkk bhalobhashii amar bouuuu 😘😘😘🤌.</p>
+
+<h2>🎥 Our Special Video</h2>
+<video controls loop style="width:90%; max-width:500px; border-radius:15px;">
+  <source src="video.mp4" type="video/mp4">
+  Your browser does not support video.
+</video>
+
+<script>
+// Typing effect
+let text = "Happy Anniversary ❤️";
+let i = 0;
+function type() {
+    if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 100);
+    }
+}
+type();
+
+// Floating hearts
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.innerHTML = "❤️";
+    heart.className = "heart";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 5000);
+}, 300);
+
+// Love timer (change date here)
+let startDate = new Date("2024-03-31");
+
+setInterval(() => {
+    let now = new Date();
+    let diff = now - startDate;
+
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    document.getElementById("timer").innerHTML =
+        "❤️ Together for " + days + " days ❤️";
+}, 1000);
+
+window.addEventListener("load", function() {
+    let music = document.getElementById("bgMusic");
+
+    // Try to play music
+    let playPromise = music.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+
+            // Start with zero volume
+            music.volume = 0;
+
+            // Fade in
+            let volume = 0;
+            let fade = setInterval(() => {
+                if (volume < 1) {
+                    volume += 0.02;
+                    music.volume = volume;
+                } else {
+                    clearInterval(fade);
+                }
+            }, 200);
+
+        }).catch(() => {
+            console.log("Autoplay blocked");
+        });
+    }
+});
+
+window.addEventListener("beforeunload", function () {
+    let music = document.getElementById("bgMusic");
+
+    if (!music) return;
+
+    let volume = music.volume;
+
+    let fade = setInterval(() => {
+        if (volume > 0.05) {
+            volume -= 0.05;
+            music.volume = volume;
+        } else {
+            music.volume = 0;
+            clearInterval(fade);
+        }
+    }, 100);
+});
+
+let isPlaying = true;
+
+function toggleMusic() {
+    let music = document.getElementById("bgMusic");
+    let icon = document.getElementById("icon");
+
+    if (isPlaying) {
+        music.pause();
+        icon.innerHTML = "▶";
+    } else {
+        music.play();
+        icon.innerHTML = "⏸";
+    }
+
+    isPlaying = !isPlaying;
+}
+
+
+music.volume = 0.2;
+
+
+</script>
+
+</body>
+</html>
